@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export function List() {
     // Hook de Array de la lista de tareas
@@ -8,7 +8,18 @@ export function List() {
     const [ noteValue, setNoteValue] = useState('');
 
     // Variable del total de notas
-    let totalNotes = notes.length;
+    const [textTotalNotes, setTextTotalNotes] = useState("");
+
+    useEffect(() => {
+        if (notes.length === 0) {
+          setTextTotalNotes("No tasks, add a task.");
+        } else if (notes.length === 1) {
+          setTextTotalNotes(`${notes.length} item left.`);
+        } else {
+          setTextTotalNotes(`${notes.length} items left.`);
+        }
+      }, [notes]);
+    
 
     // Evento de escucha de los valores del input
     const changeValue = (event) => {
@@ -33,7 +44,7 @@ export function List() {
     return (
         <div className="container d-flex flex-column justify-content-center align-items-center vh-100 w-50">
             <input type="text" className="form-control" value={noteValue} onChange={changeValue} onKeyDown={keyEnter} aria-describedby="inputLabel"></input>
-            <div id="inputLabel" className="form-text">Write your notes here.</div>
+            <div id="inputLabel" className="form-text mb-5">Write your notes here.</div>
             
             {notes.map((note, index) => (
                 <div key={index} className="d-flex w-100 border justify-content-between">
@@ -42,7 +53,7 @@ export function List() {
                 </div>
             ))}
 
-            <p>{totalNotes} items left.</p>
+            <p>{textTotalNotes}</p>
             
         </div>
     )
